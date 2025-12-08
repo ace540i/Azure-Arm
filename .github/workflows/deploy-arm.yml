@@ -8,9 +8,6 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    env:
-      ADMIN_USERNAME: ${{ secrets.ADMIN_USERNAME }}
-      ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
     steps:
       - name: Debug secrets
         run: |
@@ -36,5 +33,5 @@ jobs:
           parameters: |
             vmSku=Standard_DS1_v2
             instanceCount=3
-            adminUsername=${{ env.ADMIN_USERNAME }}
-            adminPassword=${{ env.ADMIN_PASSWORD }}
+            adminUsername=${{ secrets.ADMIN_USERNAME }}
+            adminPassword=${{ secrets.ADMIN_PASSWORD }}
