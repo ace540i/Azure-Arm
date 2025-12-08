@@ -27,4 +27,3 @@ jobs:
             instanceCount=3
             adminUsername=${{ secrets.ADMIN_USERNAME }}
             adminPassword=${{ secrets.ADMIN_PASSWORD }}
-          additionalArguments: --parameters @vmss.parameters.json
