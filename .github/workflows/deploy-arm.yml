@@ -12,6 +12,11 @@ jobs:
       ADMIN_USERNAME: ${{ secrets.ADMIN_USERNAME }}
       ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
     steps:
+      - name: Debug secrets
+        run: |
+          echo "Admin Username: ${{ secrets.ADMIN_USERNAME }}"
+          echo "Admin Password length: ${#${{ secrets.ADMIN_PASSWORD }}}"
+         
       - name: Checkout code
         uses: actions/checkout@v3
 
