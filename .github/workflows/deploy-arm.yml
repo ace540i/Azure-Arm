@@ -33,5 +33,5 @@ jobs:
           parameters: |
             vmSku=Standard_DS1_v2
             instanceCount=3
-            adminUsername=mikeAdmin1
-            adminPassword=Poiqwe12#
+            adminUsername="mikeAdmin1"
+            adminPassword="Poiqwe12#"
