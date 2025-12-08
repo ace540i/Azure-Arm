@@ -22,6 +22,7 @@ jobs:
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           resourceGroupName: arm-rg1
           template: vmss.json
+          parametersFile: vmss.parameters.json
           parameters: |
             @vmss.parameters.json
             adminUsername=${{ secrets.ADMIN_USERNAME }}
