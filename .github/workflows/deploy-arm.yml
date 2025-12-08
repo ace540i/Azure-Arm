@@ -31,4 +31,4 @@ jobs:
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           resourceGroupName: arm-rg1
           template: vmss.json
-          parameters: vmSku=Standard_DS1_v2 instanceCount=3 adminUsername=${{ secrets.ADMIN_USERNAME }} adminPassword=${{ secrets.ADMIN_PASSWORD }}
+          parameters: vmSku=Standard_B2s instanceCount=3 adminUsername=${{ secrets.ADMIN_USERNAME }} adminPassword=${{ secrets.ADMIN_PASSWORD }}
