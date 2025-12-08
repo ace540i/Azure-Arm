@@ -4,7 +4,7 @@
   "parameters": {
     "vmSku": {
       "type": "string",
-      "defaultValue": "Standard_DS1_v2"
+      "defaultValue": "Standard_B2s"
     },
     "instanceCount": {
       "type": "int",
@@ -17,12 +17,43 @@
       "type": "securestring"
     }
   },
+  "variables": {
+    "vnetName": "myVnet",
+    "subnetName": "default",
+    "addressPrefix": "10.0.0.0/16",
+    "subnetPrefix": "10.0.0.0/24",
+    "vmssName": "myVmss"
+  },
   "resources": [
+    {
+      "type": "Microsoft.Network/virtualNetworks",
+      "apiVersion": "2021-05-01",
+      "name": "[variables('vnetName')]",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "[variables('addressPrefix')]"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "[variables('subnetName')]",
+            "properties": {
+              "addressPrefix": "[variables('subnetPrefix')]"
+            }
+          }
+        ]
+      }
+    },
     {
       "type": "Microsoft.Compute/virtualMachineScaleSets",
       "apiVersion": "2021-07-01",
-      "name": "myVmss",
+      "name": "[variables('vmssName')]",
       "location": "[resourceGroup().location]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/virtualNetworks', variables('vnetName'))]"
+      ],
       "sku": {
         "name": "[parameters('vmSku')]",
         "tier": "Standard",
@@ -57,7 +88,7 @@
                       "name": "ipconfig",
                       "properties": {
                         "subnet": {
-                          "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets','myVnet','default')]"
+                          "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnetName'), variables('subnetName'))]"
                         }
                       }
                     }
@@ -69,5 +100,11 @@
         }
       }
     }
-  ]
+  ],
+  "outputs": {
+    "vmssId": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.Compute/virtualMachineScaleSets', variables('vmssName'))]"
+    }
+  }
 }
