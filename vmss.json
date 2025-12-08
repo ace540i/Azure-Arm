@@ -2,8 +2,20 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "vmSku": { "type": "string", "defaultValue": "Standard_DS1_v2" },
-    "instanceCount": { "type": "int", "defaultValue": 3 }
+    "vmSku": {
+      "type": "string",
+      "defaultValue": "Standard_DS1_v2"
+    },
+    "instanceCount": {
+      "type": "int",
+      "defaultValue": 3
+    },
+    "adminUsername": {
+      "type": "string"
+    },
+    "adminPassword": {
+      "type": "securestring"
+    }
   },
   "resources": [
     {
@@ -17,7 +29,9 @@
         "capacity": "[parameters('instanceCount')]"
       },
       "properties": {
-        "upgradePolicy": { "mode": "Manual" },
+        "upgradePolicy": {
+          "mode": "Manual"
+        },
         "virtualMachineProfile": {
           "storageProfile": {
             "imageReference": {
@@ -29,8 +43,8 @@
           },
           "osProfile": {
             "computerNamePrefix": "vmss",
-            "adminUsername": "azureuser",
-            "adminPassword": "P@ssw0rd1234!"
+            "adminUsername": "[parameters('adminUsername')]",
+            "adminPassword": "[parameters('adminPassword')]"
           },
           "networkProfile": {
             "networkInterfaceConfigurations": [
