@@ -23,6 +23,8 @@ jobs:
           resourceGroupName: arm-rg1
           template: vmss.json
           parameters: |
+            vmSku=Standard_DS1_v2
+            instanceCount=3
             adminUsername=${{ secrets.ADMIN_USERNAME }}
             adminPassword=${{ secrets.ADMIN_PASSWORD }}
           additionalArguments: --parameters @vmss.parameters.json
