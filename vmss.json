@@ -1,0 +1,59 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "vmSku": { "type": "string", "defaultValue": "Standard_DS1_v2" },
+    "instanceCount": { "type": "int", "defaultValue": 3 }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Compute/virtualMachineScaleSets",
+      "apiVersion": "2021-07-01",
+      "name": "myVmss",
+      "location": "[resourceGroup().location]",
+      "sku": {
+        "name": "[parameters('vmSku')]",
+        "tier": "Standard",
+        "capacity": "[parameters('instanceCount')]"
+      },
+      "properties": {
+        "upgradePolicy": { "mode": "Manual" },
+        "virtualMachineProfile": {
+          "storageProfile": {
+            "imageReference": {
+              "publisher": "Canonical",
+              "offer": "UbuntuServer",
+              "sku": "18.04-LTS",
+              "version": "latest"
+            }
+          },
+          "osProfile": {
+            "computerNamePrefix": "vmss",
+            "adminUsername": "azureuser",
+            "adminPassword": "P@ssw0rd1234!"
+          },
+          "networkProfile": {
+            "networkInterfaceConfigurations": [
+              {
+                "name": "nicConfig",
+                "properties": {
+                  "primary": true,
+                  "ipConfigurations": [
+                    {
+                      "name": "ipconfig",
+                      "properties": {
+                        "subnet": {
+                          "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets','myVnet','default')]"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}
