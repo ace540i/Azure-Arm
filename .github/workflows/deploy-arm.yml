@@ -30,7 +30,7 @@ jobs:
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           resourceGroupName: arm-rg1
           template: vmss.json
-          parameters: >
+          parameters: |
             {
               "vmSku": { "value": "Standard_DS1_v2" },
               "instanceCount": { "value": 3 },
