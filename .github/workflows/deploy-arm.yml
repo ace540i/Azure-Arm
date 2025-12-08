@@ -14,8 +14,11 @@ jobs:
     steps:
       - name: Debug secrets
         run: |
-          echo "Admin Username: ${{ secrets.ADMIN_USERNAME }}"
-          echo "Admin Password length: ${#${{ secrets.ADMIN_PASSWORD }}}"
+          if [ -z "${{ secrets.ADMIN_PASSWORD }}" ]; then
+            echo "Admin Password is EMPTY"
+          else
+            echo "Admin Password is SET"
+          fi
          
       - name: Checkout code
         uses: actions/checkout@v3
