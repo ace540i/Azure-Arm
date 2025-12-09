@@ -27,3 +27,14 @@ jobs:
         run: |
           echo "Running inline tests..."
           docker run --rm myapp:latest npm test
+          
+      - name: Inspect container contents
+        run: |
+          echo "=== Files in /app ==="
+          docker run --rm myapp:latest ls -la /app
+          
+          echo "=== Package.json contents ==="
+          docker run --rm myapp:latest cat /app/package.json
+          
+          echo "=== Node version ==="
+          docker run --rm myapp:latest node --version
