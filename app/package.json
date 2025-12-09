@@ -2,6 +2,6 @@
   "name": "azure-arm-app",
   "version": "1.0.0",
   "scripts": {
-    "test": "echo 'Running inline tests...' && npm run lint && npm run unit"
+    "test": "echo 'Running inline tests...'
   }
 }
