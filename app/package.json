@@ -1,3 +1,5 @@
+{
 "scripts": {
   "test": "echo 'Running inline tests...' && npm run lint && npm run unit"
+}
 }
