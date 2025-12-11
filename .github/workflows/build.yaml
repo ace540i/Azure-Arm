@@ -1,0 +1,105 @@
+name: Docker Build and Test
+
+on:
+  push:
+    branches: [ "development" ]
+  pull_request:
+    branches: [ "development" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        run: docker build --no-cache -t myapp:latest .
+
+      - name: Run linter
+        id: lint
+        continue-on-error: true
+        run: docker run --rm myapp:latest npm run lint
+
+      - name: Check lint results
+        if: steps.lint.outcome == 'failure'
+        run: |
+          echo "::error::Linting failed! Please fix lint errors."
+          exit 1
+
+      - name: Run container
+        run: docker run --rm myapp:latest echo "Container started"
+
+      - name: Run inline tests
+        run: |
+          echo "Running inline tests..."
+          docker run --rm myapp:latest npm test
+          
+      - name: Integration tests
+        run: |
+          # Start container in background
+          docker run -d --name test-app -p 3000:3000 myapp:latest
+          sleep 5
+          # Test HTTP endpoint
+          curl -f http://localhost:3000/ || exit 1
+          # Cleanup
+          docker stop test-app
+          docker rm test-app
+
+      - name: Code coverage
+        run: docker run --rm myapp:latest npm run coverage
+
+      - name: Performance test
+        run: |
+          START=$(date +%s)
+          docker run --rm myapp:latest npm start &
+          END=$(date +%s)
+          STARTUP_TIME=$((END - START))
+          echo "Startup time: ${STARTUP_TIME}s"
+    
+      - name: Inspect container contents
+        run: |
+          echo "=== Files in /app ==="
+          docker run --rm myapp:latest ls -la /app
+          
+          echo "=== Package.json contents ==="
+          docker run --rm myapp:latest cat /app/package.json
+          
+          echo "=== Node version ==="
+          docker run --rm myapp:latest node --version
+
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Create ACR if it doesn't exist
+        run: |
+          ACR_NAME="acrdockermike"
+          RESOURCE_GROUP="arm-rg1"
+          LOCATION="eastus"
+          
+          # Check if ACR exists
+          if az acr show --name $ACR_NAME --resource-group $RESOURCE_GROUP 2>/dev/null; then
+            echo "ACR $ACR_NAME already exists"
+          else
+            echo "Creating ACR $ACR_NAME..."
+            az acr create \
+              --name $ACR_NAME \
+              --resource-group $RESOURCE_GROUP \
+              --location $LOCATION \
+              --sku Basic
+            echo "ACR $ACR_NAME created successfully"
+          fi
+
+      - name: Login to Azure Container Registry
+        run: az acr login --name acrdockermike
+
+      - name: Tag and Push to ACR
+        run: |
+          docker tag myapp:latest acrdockermike.azurecr.io/myapp:latest
+          docker push acrdockermike.azurecr.io/myapp:latest
