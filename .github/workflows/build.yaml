@@ -21,8 +21,15 @@ jobs:
         run: docker build --no-cache -t myapp:latest .
 
       - name: Run linter
-          echo "Linting..................... :)))"
+        id: lint
+        continue-on-error: true
         run: docker run --rm myapp:latest npm run lint
+
+      - name: Check lint results
+        if: steps.lint.outcome == 'failure'
+        run: |
+          echo "::error::Linting failed! Please fix lint errors."
+          exit 1
 
       - name: Run container
         run: docker run --rm myapp:latest echo "Container started"
