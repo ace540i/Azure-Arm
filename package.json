@@ -4,7 +4,8 @@
   "scripts": {
     "start": "node app/index.js",
     "test": "echo Tests passed successfully",
-    "lint": "eslint '**/*.{js,jsx,ts,tsx}'"
+    "lint": "eslint '**/*.{js,jsx,ts,tsx}'",
+    "coverage": "nyc npm test"
   },
   "dependencies": {},
   "devDependencies": {
