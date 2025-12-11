@@ -49,6 +49,17 @@ jobs:
           # Cleanup
           docker stop test-app
           docker rm test-app
+
+      - name: Code coverage
+        run: docker run --rm myapp:latest npm run coverage
+
+      - name: Performance test
+        run: |
+          START=$(date +%s)
+          docker run --rm myapp:latest npm start &
+          END=$(date +%s)
+          STARTUP_TIME=$((END - START))
+          echo "Startup time: ${STARTUP_TIME}s"
     
       - name: Inspect container contents
         run: |
