@@ -6,9 +6,7 @@
     "test": "echo Tests passed successfully",
     "lint": "eslint '**/*.{js,jsx,ts,tsx}'"
   },
-  "dependencies": {
-    "eslint": "^8.x.x"
-  },
+  "dependencies": {},
   "devDependencies": {
     "eslint": "^8.x.x"
   }
