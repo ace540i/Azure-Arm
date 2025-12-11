@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "scripts": {
     "start": "node index.js",
-    "test": "echo Tests passed successfully"
+    "test": "echo Tests passed successfully",
+    "lint": "eslint ."
   },
   "dependencies": {},
   "devDependencies": {}
