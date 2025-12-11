@@ -45,7 +45,7 @@ jobs:
           docker run -d --name test-app -p 3000:3000 myapp:latest
           sleep 5
           # Test HTTP endpoint
-          curl -f http://localhost:3000/health || exit 1
+          curl -f http://localhost:3000/ || exit 1
           # Cleanup
           docker stop test-app
           docker rm test-app
