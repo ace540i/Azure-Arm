@@ -20,6 +20,10 @@ jobs:
       - name: Build Docker image
         run: docker build --no-cache -t myapp:latest .
 
+      - name: Run linter
+          echo "Linting..................... :)))"
+        run: docker run --rm myapp:latest npm run lint
+
       - name: Run container
         run: docker run --rm myapp:latest echo "Container started"
 
