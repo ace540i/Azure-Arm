@@ -39,6 +39,17 @@ jobs:
           echo "Running inline tests..."
           docker run --rm myapp:latest npm test
           
+      - name: Integration tests
+        run: |
+          # Start container in background
+          docker run -d --name test-app -p 3000:3000 myapp:latest
+          sleep 5
+          # Test HTTP endpoint
+          curl -f http://localhost:3000/health || exit 1
+          # Cleanup
+          docker stop test-app
+          docker rm test-app
+    
       - name: Inspect container contents
         run: |
           echo "=== Files in /app ==="
