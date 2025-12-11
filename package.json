@@ -6,6 +6,10 @@
     "test": "echo Tests passed successfully",
     "lint": "eslint ."
   },
-  "dependencies": {},
-  "devDependencies": {}
+  "dependencies": {
+    "eslint": "^8.x.x"
+  },
+  "devDependencies": {
+    "eslint": "^8.x.x"
+  }
 }
